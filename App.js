@@ -1,22 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Colors } from './styles'
 import { NavigationContainer } from '@react-navigation/native';
-import {SignedOutDrawerNavigator} from './navigation/drawerNavigator';
+import { SignedOutDrawerNavigator } from './navigation/drawerNavigator';
+import { initFirebase } from './helpers/auth';
 
 export default function App() {
+  initFirebase();
+
   return (
     <NavigationContainer>
-      <SignedOutDrawerNavigator/>
+      <SignedOutDrawerNavigator />
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

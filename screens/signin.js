@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Colors } from '../styles';
 import { AppLogo, GoogleIcon } from '../assets';
 import { DrawerIcon } from '../components/icons';
+import { googleSignIn } from '../helpers/auth';
 
 export default function ({ navigation }) {
   React.useEffect(() => {
@@ -18,7 +19,7 @@ export default function ({ navigation }) {
       </View>
       <View style={styles.signinOptions}>
         <Image source={GoogleIcon} />
-        <Button title="sign in with Google" />
+        <Button title="sign in with Google" onPress={googleSignIn} />
       </View>
       <View style={styles.aboutLink}>
         <Text>About this app (TODO: this should go to about screen)</Text>
