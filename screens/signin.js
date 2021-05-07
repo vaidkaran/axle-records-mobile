@@ -1,18 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
-import { Colors } from '../styles'
-import { Logo, GoogleIcon } from '../assets';
+import { Colors } from '../styles';
+import { AppLogo, GoogleIcon } from '../assets';
+import { DrawerIcon } from '../components/icons';
 
-export default function () {
+export default function ({ navigation }) {
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
-        <Image source={Logo}/>
+        <Image source={AppLogo} />
       </View>
       <View style={styles.signinOptions}>
         <Image source={GoogleIcon} />
-        <Button title='sign in with Google'/>
+        <Button title="sign in with Google" />
+      </View>
+      <View style={styles.aboutLink}>
+        <Text>About this app (TODO: this should go to about screen)</Text>
       </View>
       <StatusBar style="auto" />
     </View>
@@ -27,14 +36,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    flex: 1,
+    flex: 3,
     alignItems: 'flex-start',
     marginVertical: 100,
   },
   signinOptions: {
-    flex: 1,
+    flex: 2,
     alignItems: 'flex-start',
     flexDirection: 'row',
-  }
+  },
+  aboutLink: {
+    flex: 0.5,
+    alignItems: 'flex-end',
+  },
 });
-

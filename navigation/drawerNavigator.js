@@ -5,8 +5,10 @@ import Signin from '../screens/signin';
 import Signout from '../screens/signout';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 const SignedInDrawerNavigator = () => (
   <Drawer.Navigator initialRouteName="Home">
     <Drawer.Screen name="Home" component={Home} />
@@ -17,8 +19,10 @@ const SignedInDrawerNavigator = () => (
 
 const SignedOutDrawerNavigator = () => (
   <Drawer.Navigator initialRouteName="Signin">
-    <Drawer.Screen name="Signin" component={Signin} />
-    <Drawer.Screen name="About" component={About} />
+    <Drawer.Screen
+      name="Signin"
+      component={Signin}
+    />
   </Drawer.Navigator>
 );
 
