@@ -2,8 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Colors } from '../styles'
-import { NavigationContainer } from '@react-navigation/native';
-import Logo from '../assets/appLogo.png'
+import { Logo, GoogleIcon } from '../assets';
 
 export default function () {
   return (
@@ -12,6 +11,7 @@ export default function () {
         <Image source={Logo}/>
       </View>
       <View style={styles.signinOptions}>
+        <Image source={GoogleIcon} />
         <Button title='sign in with Google'/>
       </View>
       <StatusBar style="auto" />
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
   },
   signinOptions: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
   }
 });
 
