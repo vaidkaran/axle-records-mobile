@@ -6,10 +6,15 @@ import {
 } from './navigation/drawerNavigator';
 import { initFirebase } from './helpers/auth';
 import AuthContext from './context/auth';
+import * as firebase from 'firebase';
+import { useReducer } from 'react';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   initFirebase();
+  firebase.auth().onAuthStateChanged((user) => {
+    if(user) setIsSignedIn(true);
+  })
 
   return (
     <AuthContext.Provider value={{ isSignedIn, setIsSignedIn }}>

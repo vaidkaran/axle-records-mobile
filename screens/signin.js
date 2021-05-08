@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Colors } from '../styles';
 import { AppLogo, GoogleIcon } from '../assets';
-import { DrawerIcon } from '../components/icons';
+import { DrawerIcon } from '../components';
 import { googleSignIn } from '../helpers/auth';
 import AuthContext from '../context/auth';
 
