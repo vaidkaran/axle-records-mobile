@@ -7,11 +7,6 @@ import { ShadowCard } from '../components';
 import { PlusIcon } from '../components/icons';
 
 export default function ({ navigation }) {
-  // React.useEffect(() => {
-  //   navigation.setOptions({
-  //     headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
-  //   });
-  // }, [navigation]);
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Welcome</Text>
