@@ -10,8 +10,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const SignedInDrawerNavigator = () => (
-  <Drawer.Navigator initialRouteName="Home">
-    <Drawer.Screen name="Home" component={Home} />
+  <Drawer.Navigator initialRouteName="Home" screenOptions={{headerShown: true}}>
+    <Stack.Screen name="Home" component={Home}  />
     <Drawer.Screen name="About" component={About} />
     <Drawer.Screen name="SignOut" component={Signout} />
   </Drawer.Navigator>

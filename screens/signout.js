@@ -1,15 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useContext} from 'react';
+import AuthContext from "../context/auth";
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../styles'
+import * as firebase from 'firebase';
 
 export default function() {
-  return (
-    <View style={styles.container}>
-      <Text>Signout</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  const { setIsSignedIn } = useContext(AuthContext);
+
+  React.useEffect(() => {
+    setIsSignedIn(false);
+    firebase.auth().signOut();
+  }, []);
+
+  return <View></View>
 }
 
 const styles = StyleSheet.create({

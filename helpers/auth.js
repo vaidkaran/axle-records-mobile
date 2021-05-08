@@ -18,18 +18,17 @@ const initFirebase = () => {
   }
 };
 
-const googleSignIn = async () => {
+const googleSignIn = async (setIsSignedIn) => {
   const config = {
     androidClientId:
       '97966421563-vbau4nupvdunk6kpvkjbuime02f8hf4e.apps.googleusercontent.com',
-    clientId:
-      '97966421563-ppp0d1gga9i3p5g1bmbrq0u9njmn8h8v.apps.googleusercontent.com',
     scopes: ['profile', 'email'],
     behaviour: 'web',
   };
 
   const res = await Google.logInAsync(config);
   if (res.type === 'success') {
+    setIsSignedIn(true);
     await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     const credential = firebase.auth.GoogleAuthProvider.credential(
       res.idToken,
@@ -39,8 +38,9 @@ const googleSignIn = async () => {
       .auth()
       .signInWithCredential(credential);
     const idToken = await firebase.auth().currentUser.getIdToken();
-    console.log('idToke is: ', idToken);
+    console.log('idToken is: ', idToken);
   } else {
+    // TODO: ask the user that it this failed and to try again
     console.log('xxxxxx Google sign in failed xxxxxxxx');
   }
 };

@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Colors } from '../styles';
 import { AppLogo, GoogleIcon } from '../assets';
 import { DrawerIcon } from '../components/icons';
 import { googleSignIn } from '../helpers/auth';
+import AuthContext from '../context/auth';
 
 export default function ({ navigation }) {
+  const { setIsSignedIn } = useContext(AuthContext);
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
@@ -19,7 +21,10 @@ export default function ({ navigation }) {
       </View>
       <View style={styles.signinOptions}>
         <Image source={GoogleIcon} />
-        <Button title="sign in with Google" onPress={googleSignIn} />
+        <Button
+          title="sign in with Google"
+          onPress={() => googleSignIn(setIsSignedIn)}
+        />
       </View>
       <View style={styles.aboutLink}>
         <Text>About this app (TODO: this should go to about screen)</Text>
