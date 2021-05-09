@@ -3,7 +3,6 @@ import About from '../screens/about';
 import Home from '../screens/home';
 import Signin from '../screens/signin';
 import Signout from '../screens/signout';
-import FirstTimeUserWelcome from '../screens/firstTimeUserWelcome';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,17 +12,12 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const SignedInDrawerNavigator = () => (
   <Drawer.Navigator
-    initialRouteName="FirstTimeUserWelcome"
+    initialRouteName="Home"
     screenOptions={{
       headerShown: true,
       headerStyle: { backgroundColor: Colors.lightGrey },
     }}
   >
-    <Stack.Screen
-      name="FirstTimeUserWelcome"
-      component={FirstTimeUserWelcome}
-      options={{ title: '' }}
-    />
     <Stack.Screen name="Home" component={Home} />
     <Drawer.Screen name="About" component={About} />
     <Drawer.Screen name="SignOut" component={Signout} />
