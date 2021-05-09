@@ -3,13 +3,22 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
-import { PlusIcon } from '../components/icons';
+import { PlusIcon, DrawerIcon } from '../components/icons';
 
-export default function () {
+export default function ({ navigation }) {
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.message}>Let's start by adding a vehicle</Text>
-      <ShadowCard style={styles.card}>
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Add a vehicle</Text>
         <PlusIcon />
       </ShadowCard>
       <StatusBar style="auto" />
@@ -20,15 +29,15 @@ export default function () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGrey,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   message: {
     fontSize: 20,
-    padding: 20,
+    paddingBottom: 10,
   },
   card: {
-    height: 100,
-  }
+    height: 150,
+  },
 });
