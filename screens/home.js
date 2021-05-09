@@ -2,7 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../styles';
-import { ShadowCard, PlusIcon, DrawerIcon } from '../components';
+import { ShadowCard } from '../components';
+import { PlusIcon, DrawerIcon } from "../assets";
 
 export default function ({ navigation }) {
   React.useEffect(() => {

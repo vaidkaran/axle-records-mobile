@@ -2,11 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../styles';
+import { ShadowCard } from '../components';
+import { Dropdown } from "../assets";
 
-export default function () {
+export default function ({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>Add vehicle screen</Text>
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Select a category</Text>
+        <Dropdown />
+      </ShadowCard>
       <StatusBar style="auto" />
     </View>
   );
@@ -15,16 +23,18 @@ export default function () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGrey,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   message: {
     fontSize: 20,
-    padding: 20,
+    paddingBottom: 10,
+  },
+  Dropdown: {
+    flexDirection: 'row'
   },
   card: {
-    height: 100,
-  }
+    height: 150,
+  },
 });
-

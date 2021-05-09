@@ -1,7 +1,38 @@
 import GoogleIcon from './googleIcon.png';
 import AppLogo from './appLogo.png';
+import React from 'react';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
+
+const DrawerIcon = ({ onPress }) => {
+  return <Ionicons name="ios-menu" size={24} color="black" onPress={onPress} />;
+};
+
+const PlusIcon = ({ onPress, size }) => {
+  return (
+    <AntDesign
+      name="pluscircleo"
+      size={size || 60}
+      color="black"
+      onPress={onPress}
+    />
+  );
+};
+
+const Dropdown = ({ onPress, size }) => {
+  return (
+    <AntDesign
+      name="caretdown"
+      size={size || 24}
+      color="black"
+      onPress={onPress}
+    />
+  );
+};
 
 module.exports = {
   AppLogo,
   GoogleIcon,
-}
+  DrawerIcon,
+  PlusIcon,
+  Dropdown,
+};

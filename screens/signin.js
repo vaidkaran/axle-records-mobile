@@ -2,8 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { Colors } from '../styles';
-import { AppLogo, GoogleIcon } from '../assets';
-import { DrawerIcon } from '../components';
+import { AppLogo, GoogleIcon, DrawerIcon } from '../assets';
 import { googleSignIn } from '../helpers/auth';
 import AuthContext from '../context/auth';
 
