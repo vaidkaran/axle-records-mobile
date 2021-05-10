@@ -18,21 +18,9 @@ const PlusIcon = ({ onPress, size }) => {
   );
 };
 
-const Dropdown = ({ onPress, size }) => {
-  return (
-    <AntDesign
-      name="caretdown"
-      size={size || 24}
-      color="black"
-      onPress={onPress}
-    />
-  );
-};
-
 module.exports = {
   AppLogo,
   GoogleIcon,
   DrawerIcon,
   PlusIcon,
-  Dropdown,
 };
