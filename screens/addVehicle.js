@@ -15,18 +15,14 @@ export default function ({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Picker
-          items={brands}
-          selectedValue={selectedVehicleBrand}
-          onValueChange={onValueChange}
-        />
+      <Picker
+        items={brands}
+        selectedValue={selectedVehicleBrand}
+        onValueChange={onValueChange}
+        defaultLabel='Select a brand'
+      />
 
-        <View style={styles.cardItemsContainer}></View>
-      </ShadowCard>
+      <View style={styles.cardItemsContainer}></View>
       <StatusBar style="auto" />
     </View>
   );
