@@ -7,8 +7,12 @@ import { Dropdown } from '../assets';
 import { Picker } from '@react-native-picker/picker';
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react';
 
+const brands = ['maruti suzuki', 'nissan', 'honda', 'ford'].map((brand, index) => (
+  <Picker.Item label={brand} value={brand} key={index} />
+));
+
 export default function ({ navigation }) {
-  const [selectedVehicleCategory, setSeletedVehicleCategory] = useState(null);
+  const [selectedVehicleBrand, setSeletedVehicleBrand] = useState(null);
   return (
     <View style={styles.container}>
       <ShadowCard
@@ -17,15 +21,19 @@ export default function ({ navigation }) {
       >
         <View style={styles.cardItemsContainer}>
           <Picker
-            style={{ fontSize: 40, height: 50, width: '90%', borderColor: 'blue'}}
-            selectedValue={selectedVehicleCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setSeletedVehicleCategory(itemValue)
-            }
+            style={{
+              fontSize: 40,
+              height: 50,
+              width: '90%',
+              borderColor: 'blue',
+            }}
+            selectedValue={selectedVehicleBrand}
+            onValueChange={(itemValue, itemIndex) => {
+              if (itemValue !== null) console.log('val changed'); setSeletedVehicleBrand(itemValue);
+            }}
           >
-            <Picker.Item label="Select a category" value={null} />
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="hi" />
+            <Picker.Item label='Select a brand' value={null} key={null} />
+            {brands}
           </Picker>
         </View>
       </ShadowCard>
