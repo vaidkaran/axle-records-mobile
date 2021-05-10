@@ -9,10 +9,6 @@ export default function ({
   onValueChange,
   style,
 }) {
-  const pickerItems = items.map((item, index) => (
-    <Picker.Item label={item} value={item} key={index} />
-  ));
-
   return (
     <Picker
       style={{ ...styles.picker, ...style }}
