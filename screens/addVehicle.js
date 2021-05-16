@@ -1,87 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { Text, StyleSheet, View, Button } from 'react-native';
 import { Colors } from '../styles';
 import { MaterialIcons } from '@expo/vector-icons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import { getBrands, getModels } from '../api/axleRecordsApi/vehicles';
-
-const carBrands = ['maruti suzuki', 'nissan', 'honda', 'ford'];
-const bikeBrands = ['tvs', 'baja', 'honda', 'ktm'];
-const categories = ['car', 'bike', 'scooter'];
-
-// const items = [
-//   // this is the parent or 'item'
-//   {
-//     name: 'Fruits',
-//     id: 0,
-//     // these are the children or 'sub items'
-//     children: [
-//       {
-//         name: 'Apple',
-//         id: 10,
-//       },
-//       {
-//         name: 'Strawberry',
-//         id: 17,
-//       },
-//       {
-//         name: 'Pineapple',
-//         id: 13,
-//       },
-//       {
-//         name: 'Banana',
-//         id: 14,
-//       },
-//       {
-//         name: 'Watermelon',
-//         id: 15,
-//       },
-//       {
-//         name: 'Kiwi fruit',
-//         id: 16,
-//       },
-//     ],
-//   },
-// ];
+import { getAllModels } from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation }) {
   const [items, setItems] = useState([]);
+  const [selectedModelId, setSelectedModelId] = useState();
+  const ref = useRef(null);
+
   useEffect(() => {
     (async () => {
-      const brands = await getBrands();
-
       const itemsToSet = [];
-      await Promise.all(
-        brands.data.map(async (brand) => {
-          const models = await getModels(brand.id);
-          const modelsList = models.data.map((model) => ({
-            id: model.id,
-            name: model.name,
-          }));
-          itemsToSet.push({
-            id: brand.id,
-            name: brand.name,
-            children: modelsList,
-          });
-        })
-      );
-      console.log('done');
+      const modelsInfo = await getAllModels();
+      modelsInfo.map((brand) => {
+        const modelsList = brand.vehicle_models.map((model) => ({
+          id: model.id,
+          name: model.name,
+        }));
+        itemsToSet.push({
+          id: brand.id,
+          name: brand.name,
+          children: modelsList,
+        });
+      });
       setItems(itemsToSet);
     })();
   }, []);
 
-  const [selectedVehicle, setSeletedVehicle] = useState(null);
-  const onCategoryValueChange = (itemValue, itemIndex) => {
-    if (itemValue !== null) console.log('category changed');
-    setSelectedVehicleCategory(itemValue);
-  };
-  const onBrandValueChange = (itemValue, itemIndex) => {
-    if (itemValue !== null) console.log('brand changed');
-    setSeletedVehicleBrand(itemValue);
-  };
-
-  const ref = useRef(null);
   const footer = () => {
     return (
       <Button
@@ -91,10 +39,10 @@ export default function ({ navigation }) {
       />
     );
   };
-  const [chosenItems, setChosenItems] = useState([]);
 
   return (
-    // <View style={styles.container}>
+    // TODO: maybe show the selector only once we have response from server; else show spinner
+    // TODO: same with select variant selector
     <View>
       <SectionedMultiSelect
         stickyFooterComponent={footer}
@@ -105,15 +53,24 @@ export default function ({ navigation }) {
         uniqueKey="id"
         readOnlyHeadings={true}
         subKey="children"
-        selectText="Choose just one..."
-        searchPlaceholderText='Search here (eg: "Honda" or "vento")'
-        onSelectedItemsChange={(itemChosen) => {
-          console.log('this', itemChosen);
-          setChosenItems(itemChosen);
+        selectText="Select vehicle model"
+        searchPlaceholderText='Search here (eg: "Honda" or "Activa")'
+        onSelectedItemsChange={([chosenModelId]) => {
+          console.log('before ', selectedModelId);
+          setSelectedModelId(chosenModelId);
+          console.log('after ', selectedModelId);
         }}
-        selectedItems={chosenItems}
+        selectedItems={[selectedModelId]}
         ref={ref}
       />
+
+      {selectedModelId ? (
+        <View>
+          <Text>Show variant selector for {selectedModelId}</Text>
+        </View>
+      ) : (
+        <></>
+      )}
 
       <StatusBar style="auto" />
     </View>

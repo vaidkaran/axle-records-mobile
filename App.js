@@ -12,20 +12,16 @@ export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   initFirebase();
   firebase.auth().onAuthStateChanged((user) => {
-    if(user) setIsSignedIn(true);
-  })
+    if (user) setIsSignedIn(true);
+  });
 
   return (
     <AuthContext.Provider value={{ isSignedIn, setIsSignedIn }}>
       <NavigationContainer>
         {isSignedIn ? (
-          <>
-            <SignedInDrawerNavigator />
-          </>
+          <SignedInDrawerNavigator />
         ) : (
-          <>
-            <SignedOutDrawerNavigator />
-          </>
+          <SignedOutDrawerNavigator />
         )}
       </NavigationContainer>
     </AuthContext.Provider>
