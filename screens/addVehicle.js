@@ -1,36 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import { Colors } from '../styles';
 import { MaterialIcons } from '@expo/vector-icons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import { getAllModels } from '../api/axleRecordsApi/vehicles';
+import { getAllModels, getVariants } from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation }) {
-  const [items, setItems] = useState([]);
+  const [models, setModels] = useState([]);
+  const [variants, setVariants] = useState([]);
   const [selectedModelId, setSelectedModelId] = useState();
+  const [selectedVariantId, setSelectedVariantId] = useState();
   const ref = useRef(null);
+  const variantRef = useRef(null);
+
+  const populateVariants = async (modelId) => {
+    const variantsInfo = await getVariants(modelId);
+    const itemsToSet = variantsInfo.map((variant) => ({
+      id: variant.id,
+      name: variant.name,
+    }));
+    setVariants(itemsToSet);
+  };
 
   useEffect(() => {
     (async () => {
-      const itemsToSet = [];
       const modelsInfo = await getAllModels();
-      modelsInfo.map((brand) => {
+      const itemsToSet = modelsInfo.map((brand) => {
         const modelsList = brand.vehicle_models.map((model) => ({
           id: model.id,
           name: model.name,
         }));
-        itemsToSet.push({
+        return ({
           id: brand.id,
           name: brand.name,
           children: modelsList,
         });
       });
-      setItems(itemsToSet);
+      setModels(itemsToSet);
     })();
   }, []);
 
-  const footer = () => {
+  const modelFooter = () => {
     return (
       <Button
         color="red"
@@ -40,15 +51,25 @@ export default function ({ navigation }) {
     );
   };
 
+  const variantFooter = () => {
+    return (
+      <Button
+        color="red"
+        title="cancel"
+        onPress={() => variantRef?.current?._toggleSelector()}
+      />
+    );
+  };
+
   return (
     // TODO: maybe show the selector only once we have response from server; else show spinner
     // TODO: same with select variant selector
     <View>
       <SectionedMultiSelect
-        stickyFooterComponent={footer}
+        stickyFooterComponent={modelFooter}
         single={true}
         hideConfirm={true}
-        items={items}
+        items={models}
         IconRenderer={MaterialIcons}
         uniqueKey="id"
         readOnlyHeadings={true}
@@ -56,9 +77,8 @@ export default function ({ navigation }) {
         selectText="Select vehicle model"
         searchPlaceholderText='Search here (eg: "Honda" or "Activa")'
         onSelectedItemsChange={([chosenModelId]) => {
-          console.log('before ', selectedModelId);
           setSelectedModelId(chosenModelId);
-          console.log('after ', selectedModelId);
+          populateVariants(chosenModelId);
         }}
         selectedItems={[selectedModelId]}
         ref={ref}
@@ -66,7 +86,21 @@ export default function ({ navigation }) {
 
       {selectedModelId ? (
         <View>
-          <Text>Show variant selector for {selectedModelId}</Text>
+          <SectionedMultiSelect
+            stickyFooterComponent={variantFooter}
+            single={true}
+            hideConfirm={true}
+            items={variants}
+            IconRenderer={MaterialIcons}
+            uniqueKey="id"
+            selectText="Select vehicle variant"
+            searchPlaceholderText="Search here"
+            onSelectedItemsChange={([chosenVariantId]) => {
+              setSelectedVariantId(chosenVariantId);
+            }}
+            selectedItems={[selectedVariantId]}
+            ref={variantRef}
+          />
         </View>
       ) : (
         <></>
