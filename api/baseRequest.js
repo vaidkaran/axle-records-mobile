@@ -14,14 +14,21 @@ const getBaseUrl = () => {
 };
 
 // supports fullRes=true
+// supports authHeaders with default true
 const request = async (opts = {}) => {
+  const authHeaders = opts.authHeaders || true;
   if (!opts.url.match('^/')) {
     // prepend / in path if not present
     opts.url = '/' + opts.url;
   }
-  const idtoken = await firebase.auth().currentUser.getIdToken();
   const qsParams = qs.stringify(opts.qs, { addQueryPrefix: true });
-  const headers = Object.assign({}, { authorization: idtoken }, opts.headers);
+  let headers;
+  if(authHeaders){
+    const idtoken = await firebase.auth().currentUser.getIdToken();
+    headers = Object.assign({}, { authorization: idtoken }, opts.headers);
+  } else {
+    headers = opts.headers;
+  }
   const reqOpts = {
     method: opts.method || 'get',
     url: getBaseUrl() + opts.url + qsParams,

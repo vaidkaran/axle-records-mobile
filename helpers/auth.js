@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import * as Google from 'expo-google-app-auth';
+import { create_or_sign_in } from '../api/axleRecordsApi/users';
 
 const initFirebase = () => {
   const firebaseConfig = {
@@ -40,7 +41,8 @@ const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
       .signInWithCredential(credential);
     const idToken = await firebase.auth().currentUser.getIdToken();
     setAuthInProgress(false);
-    console.log('idToken is: ', idToken);
+    const userRes = await create_or_sign_in(idToken, { fullRes: true });
+    console.log('create_or_sign_in status: ', userRes.status);
   } else {
     // TODO: ask the user that it this failed and to try again
     console.log('xxxxxx Google sign in failed xxxxxxxx');

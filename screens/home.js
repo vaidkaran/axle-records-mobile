@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
 import { PlusIcon, DrawerIcon } from "../assets";
@@ -13,7 +13,48 @@ export default function ({ navigation }) {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Car 1</Text>
+        <PlusIcon />
+      </ShadowCard>
+
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Car 2</Text>
+        <PlusIcon />
+      </ShadowCard>
+
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Car 2</Text>
+        <PlusIcon />
+      </ShadowCard>
+
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Car 2</Text>
+        <PlusIcon />
+      </ShadowCard>
+
+      <ShadowCard
+        style={styles.card}
+        onPress={() => navigation.navigate('AddVehicle')}
+      >
+        <Text style={styles.message}>Car 2</Text>
+        <PlusIcon />
+      </ShadowCard>
+
+
       <ShadowCard
         style={styles.card}
         onPress={() => navigation.navigate('AddVehicle')}
@@ -22,7 +63,7 @@ export default function ({ navigation }) {
         <PlusIcon />
       </ShadowCard>
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -30,8 +71,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.lightGrey,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
   },
   message: {
     fontSize: 20,
