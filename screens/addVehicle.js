@@ -1,6 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import { Colors } from '../styles';
 import { MaterialIcons } from '@expo/vector-icons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -31,11 +37,11 @@ export default function ({ navigation }) {
           id: model.id,
           name: model.name,
         }));
-        return ({
+        return {
           id: brand.id,
           name: brand.name,
           children: modelsList,
-        });
+        };
       });
       setModels(itemsToSet);
     })();
@@ -71,6 +77,7 @@ export default function ({ navigation }) {
         hideConfirm={true}
         items={models}
         IconRenderer={MaterialIcons}
+        noItemsComponent={<ActivityIndicator size="large" color="#0000ff" />}
         uniqueKey="id"
         readOnlyHeadings={true}
         subKey="children"
@@ -91,6 +98,9 @@ export default function ({ navigation }) {
             single={true}
             hideConfirm={true}
             items={variants}
+            noItemsComponent={
+              <ActivityIndicator size="large" color="#0000ff" />
+            }
             IconRenderer={MaterialIcons}
             uniqueKey="id"
             selectText="Select vehicle variant"

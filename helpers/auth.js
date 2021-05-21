@@ -18,7 +18,7 @@ const initFirebase = () => {
   }
 };
 
-const googleSignIn = async (setIsSignedIn) => {
+const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
   const config = {
     androidClientId:
       '97966421563-vbau4nupvdunk6kpvkjbuime02f8hf4e.apps.googleusercontent.com',
@@ -26,6 +26,7 @@ const googleSignIn = async (setIsSignedIn) => {
     behaviour: 'web',
   };
 
+  setAuthInProgress(true);
   const res = await Google.logInAsync(config);
   if (res.type === 'success') {
     setIsSignedIn(true);
@@ -38,6 +39,7 @@ const googleSignIn = async (setIsSignedIn) => {
       .auth()
       .signInWithCredential(credential);
     const idToken = await firebase.auth().currentUser.getIdToken();
+    setAuthInProgress(false);
     console.log('idToken is: ', idToken);
   } else {
     // TODO: ask the user that it this failed and to try again
