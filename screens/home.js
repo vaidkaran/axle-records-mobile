@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
-import { PlusIcon, DrawerIcon } from '../assets';
+import { DotsVertical, PlusIcon, DrawerIcon, Edit } from '../assets';
 import { getVehicles } from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation, route }) {
@@ -26,8 +26,12 @@ export default function ({ navigation, route }) {
     });
   }, [navigation]);
 
+  const optionsHandler = () => {
+    console.log('options clicked.....')
+  }
+
   return (
-    <View>
+    <View style={styles.container}>
       {vehicles ? (
         <FlatList
           data={vehicles}
@@ -37,13 +41,33 @@ export default function ({ navigation, route }) {
               style={styles.card}
               onPress={() => navigation.navigate('AddVehicle')}
             >
-              <Text style={styles.message}>{item.name}</Text>
+              <View style={{ flex: 1, width: '100%' }}>
+                <View
+                  style={{
+                    flex: 1,
+                    position: 'absolute',
+                    right: 1,
+                  }}
+                >
+                  <Edit onPress={optionsHandler}/>
+                </View>
+                <View
+                  style={{
+                    flex: 4,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={styles.message}>{item.name}</Text>
+                </View>
+              </View>
             </ShadowCard>
           )}
         />
       ) : (
         <ActivityIndicator size="large" color="#0000ff" />
       )}
+
       <ShadowCard
         style={styles.card}
         onPress={() => navigation.navigate('AddVehicle')}
@@ -58,7 +82,6 @@ export default function ({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.lightGrey,
   },
   message: {
