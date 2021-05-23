@@ -42,6 +42,7 @@ const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
     const idToken = await firebase.auth().currentUser.getIdToken();
     setAuthInProgress(false);
     const userRes = await create_or_sign_in(idToken, { fullRes: true });
+    console.log('idToken: ', idToken);
     console.log('create_or_sign_in status: ', userRes.status);
   } else {
     // TODO: ask the user that it this failed and to try again

@@ -1,11 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
-import { PlusIcon, DrawerIcon } from "../assets";
+import { PlusIcon, DrawerIcon } from '../assets';
+import { getVehicles } from '../api/axleRecordsApi/vehicles';
 
-export default function ({ navigation }) {
+export default function ({ navigation, route }) {
+  const [vehicles, setVehicles] = useState();
+  React.useEffect(() => {
+    (async () => {
+      setVehicles(await getVehicles());
+    })();
+  }, [route.params]);
+
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
@@ -13,48 +27,23 @@ export default function ({ navigation }) {
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Car 1</Text>
-        <PlusIcon />
-      </ShadowCard>
-
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Car 2</Text>
-        <PlusIcon />
-      </ShadowCard>
-
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Car 2</Text>
-        <PlusIcon />
-      </ShadowCard>
-
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Car 2</Text>
-        <PlusIcon />
-      </ShadowCard>
-
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Car 2</Text>
-        <PlusIcon />
-      </ShadowCard>
-
-
+    <View>
+      {vehicles ? (
+        <FlatList
+          data={vehicles}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ShadowCard
+              style={styles.card}
+              onPress={() => navigation.navigate('AddVehicle')}
+            >
+              <Text style={styles.message}>{item.name}</Text>
+            </ShadowCard>
+          )}
+        />
+      ) : (
+        <ActivityIndicator size="large" color="#0000ff" />
+      )}
       <ShadowCard
         style={styles.card}
         onPress={() => navigation.navigate('AddVehicle')}
@@ -63,7 +52,7 @@ export default function ({ navigation }) {
         <PlusIcon />
       </ShadowCard>
       <StatusBar style="auto" />
-    </ScrollView>
+    </View>
   );
 }
 

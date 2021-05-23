@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Text,
+  TextInput,
   StyleSheet,
   View,
   Button,
@@ -10,14 +10,22 @@ import {
 import { Colors } from '../styles';
 import { MaterialIcons } from '@expo/vector-icons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import { getAllModels, getVariants } from '../api/axleRecordsApi/vehicles';
+import {
+  createVehicle,
+  getAllModels,
+  getVariants,
+} from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation }) {
   const [models, setModels] = useState([]);
   const [variants, setVariants] = useState([]);
   const [selectedModelId, setSelectedModelId] = useState();
+  const [selectedModelName, setSelectedModelName] = useState();
   const [selectedVariantId, setSelectedVariantId] = useState();
-  const ref = useRef(null);
+  const [selectedVariantName, setSelectedVariantName] = useState();
+  const [vehicleName, setVehicleName] = useState();
+
+  const modelRef = useRef(null);
   const variantRef = useRef(null);
 
   const populateVariants = async (modelId) => {
@@ -27,6 +35,12 @@ export default function ({ navigation }) {
       name: variant.name,
     }));
     setVariants(itemsToSet);
+  };
+
+  const addVehicle = async () => {
+    // const name = vehicleName ? vehicleName : `${selectedModelName} ${selectedVariantName}`
+    // await createVehicle(name, selectedVariantId);
+    navigation.navigate('Home', {refresh: true});
   };
 
   useEffect(() => {
@@ -52,7 +66,7 @@ export default function ({ navigation }) {
       <Button
         color="red"
         title="cancel"
-        onPress={() => ref?.current?._toggleSelector()}
+        onPress={() => modelRef?.current?._toggleSelector()}
       />
     );
   };
@@ -68,8 +82,6 @@ export default function ({ navigation }) {
   };
 
   return (
-    // TODO: maybe show the selector only once we have response from server; else show spinner
-    // TODO: same with select variant selector
     <View>
       <SectionedMultiSelect
         stickyFooterComponent={modelFooter}
@@ -83,12 +95,15 @@ export default function ({ navigation }) {
         subKey="children"
         selectText="Select vehicle model"
         searchPlaceholderText='Search here (eg: "Honda" or "Activa")'
+        onSelectedItemObjectsChange={([chosenModel]) => {
+          setSelectedModelName(chosenModel.name);
+        }}
         onSelectedItemsChange={([chosenModelId]) => {
           setSelectedModelId(chosenModelId);
           populateVariants(chosenModelId);
         }}
         selectedItems={[selectedModelId]}
-        ref={ref}
+        ref={modelRef}
       />
 
       {selectedModelId ? (
@@ -105,12 +120,32 @@ export default function ({ navigation }) {
             uniqueKey="id"
             selectText="Select vehicle variant"
             searchPlaceholderText="Search here"
+            onSelectedItemObjectsChange={([chosenVariant]) => {
+              setSelectedVariantName(chosenVariant.name);
+            }}
             onSelectedItemsChange={([chosenVariantId]) => {
               setSelectedVariantId(chosenVariantId);
             }}
             selectedItems={[selectedVariantId]}
             ref={variantRef}
           />
+        </View>
+      ) : (
+        <></>
+      )}
+
+      {selectedVariantId ? (
+        <View>
+          <View style={{ margin: 20, borderWidth: 1 }}>
+            <TextInput
+              placeholder="Enter a name of your choice (optional)"
+              onChangeText={(text) => setVehicleName(text)}
+              defaultValue={vehicleName}
+            />
+          </View>
+          <View style={{ margin: 20, borderWidth: 1 }}>
+            <Button title="Submit" onPress={addVehicle} />
+          </View>
         </View>
       ) : (
         <></>
