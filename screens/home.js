@@ -7,13 +7,16 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Button, Overlay } from 'react-native-elements';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
-import { DotsVertical, PlusIcon, DrawerIcon, Edit } from '../assets';
+import { PlusIcon, DrawerIcon, Edit } from '../assets';
 import { getVehicles } from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation, route }) {
   const [vehicles, setVehicles] = useState();
+  const [overlayVisible, setOverlayVisible] = useState(false);
+
   React.useEffect(() => {
     (async () => {
       setVehicles(await getVehicles());
@@ -26,12 +29,17 @@ export default function ({ navigation, route }) {
     });
   }, [navigation]);
 
-  const optionsHandler = () => {
-    console.log('options clicked.....')
-  }
+  const toggleOverlay = () => {
+    setOverlayVisible(!overlayVisible);
+  };
 
   return (
     <View style={styles.container}>
+      <Overlay
+        overlayStyle={styles.overlay}
+        isVisible={overlayVisible}
+        onBackdropPress={toggleOverlay}
+      ></Overlay>
       {vehicles ? (
         <FlatList
           data={vehicles}
@@ -49,7 +57,7 @@ export default function ({ navigation, route }) {
                     right: 1,
                   }}
                 >
-                  <Edit onPress={optionsHandler}/>
+                  <Edit onPress={toggleOverlay} />
                 </View>
                 <View
                   style={{
@@ -90,5 +98,10 @@ const styles = StyleSheet.create({
   },
   card: {
     height: 150,
+  },
+  overlay: {
+    height: '70%',
+    width: '80%',
+    borderRadius: 20,
   },
 });
