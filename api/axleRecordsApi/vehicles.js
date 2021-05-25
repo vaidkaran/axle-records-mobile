@@ -20,6 +20,14 @@ const createVehicle = async (name, vehicleVariantId) => {
   });
 };
 
+const udpateVehicle = async (id, name) => {
+  return request({
+    method: 'patch',
+    url: `/vehicles/${id}`,
+    data: { name },
+  });
+};
+
 module.exports = {
   getAllModels,
   getVariants,

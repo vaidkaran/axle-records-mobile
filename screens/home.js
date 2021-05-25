@@ -6,8 +6,9 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
 } from 'react-native';
-import { Button, Overlay } from 'react-native-elements';
+import { Button, Overlay, Input } from 'react-native-elements';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
 import { PlusIcon, DrawerIcon, Edit } from '../assets';
@@ -16,6 +17,7 @@ import { getVehicles } from '../api/axleRecordsApi/vehicles';
 export default function ({ navigation, route }) {
   const [vehicles, setVehicles] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [vehicleNameEditOverlay, setVehicleNameEditOverlay] = useState();
 
   React.useEffect(() => {
     (async () => {
@@ -29,8 +31,13 @@ export default function ({ navigation, route }) {
     });
   }, [navigation]);
 
-  const toggleOverlay = () => {
-    setOverlayVisible(!overlayVisible);
+  const openOverlay = (vehicleName) => {
+    setVehicleNameEditOverlay(vehicleName);
+    setOverlayVisible(true);
+  };
+
+  const closeOverlay = () => {
+    setOverlayVisible(false);
   };
 
   return (
@@ -38,17 +45,32 @@ export default function ({ navigation, route }) {
       <Overlay
         overlayStyle={styles.overlay}
         isVisible={overlayVisible}
-        onBackdropPress={toggleOverlay}
-      ></Overlay>
+        onBackdropPress={closeOverlay}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 8 }}>
+            <Input
+              defaultValue={vehicleNameEditOverlay}
+              rightIcon={<Edit />}
+              rightIcon={{ type: 'antdesign', name: 'edit' }}
+            />
+            <Button type="solid" title="Save" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              type="solid"
+              title="Delete"
+              buttonStyle={{ backgroundColor: 'red' }}
+            />
+          </View>
+        </View>
+      </Overlay>
       {vehicles ? (
         <FlatList
           data={vehicles}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <ShadowCard
-              style={styles.card}
-              onPress={() => navigation.navigate('AddVehicle')}
-            >
+            <ShadowCard style={styles.card}>
               <View style={{ flex: 1, width: '100%' }}>
                 <View
                   style={{
@@ -57,7 +79,7 @@ export default function ({ navigation, route }) {
                     right: 1,
                   }}
                 >
-                  <Edit onPress={toggleOverlay} />
+                  <Edit onPress={() => openOverlay(item.name)} />
                 </View>
                 <View
                   style={{
@@ -100,7 +122,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   overlay: {
-    height: '70%',
+    height: '50%',
     width: '80%',
     borderRadius: 20,
   },
