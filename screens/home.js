@@ -12,12 +12,16 @@ import { Button, Overlay, Input } from 'react-native-elements';
 import { Colors } from '../styles';
 import { ShadowCard } from '../components';
 import { PlusIcon, DrawerIcon, Edit } from '../assets';
-import { getVehicles } from '../api/axleRecordsApi/vehicles';
+import {
+  getVehicles,
+  updateVehicle,
+  deleteVehicle,
+} from '../api/axleRecordsApi/vehicles';
 
 export default function ({ navigation, route }) {
   const [vehicles, setVehicles] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
-  const [vehicleNameEditOverlay, setVehicleNameEditOverlay] = useState();
+  const [vehicleUpdateData, setVehicleUpdateData] = useState({});
 
   React.useEffect(() => {
     (async () => {
@@ -31,14 +35,27 @@ export default function ({ navigation, route }) {
     });
   }, [navigation]);
 
-  const openOverlay = (vehicleName) => {
-    setVehicleNameEditOverlay(vehicleName);
+  const openOverlay = (vehicleId, vehicleName) => {
+    setVehicleUpdateData({ id: vehicleId, name: vehicleName });
     setOverlayVisible(true);
   };
 
   const closeOverlay = () => {
     setOverlayVisible(false);
+    setVehicleUpdateData({});
   };
+
+  const updateVehicleName = async () => {
+    await updateVehicle(vehicleUpdateData.id, vehicleUpdateData.name);
+    setOverlayVisible(false);
+    setVehicles(await getVehicles());
+  };
+
+  const deleteSelectedVehicle = async () => {
+    await deleteVehicle(vehicleUpdateData.id)
+    setOverlayVisible(false);
+    setVehicles(await getVehicles());
+  }
 
   return (
     <View style={styles.container}>
@@ -50,17 +67,21 @@ export default function ({ navigation, route }) {
         <View style={{ flex: 1 }}>
           <View style={{ flex: 8 }}>
             <Input
-              defaultValue={vehicleNameEditOverlay}
+              defaultValue={vehicleUpdateData.name}
               rightIcon={<Edit />}
               rightIcon={{ type: 'antdesign', name: 'edit' }}
+              onChangeText={(name) =>
+                setVehicleUpdateData({ id: vehicleUpdateData.id, name })
+              }
             />
-            <Button type="solid" title="Save" />
+            <Button type="solid" title="Save" onPress={updateVehicleName} />
           </View>
           <View style={{ flex: 1 }}>
             <Button
               type="solid"
               title="Delete"
               buttonStyle={{ backgroundColor: 'red' }}
+              onPress={deleteSelectedVehicle}
             />
           </View>
         </View>
@@ -79,7 +100,7 @@ export default function ({ navigation, route }) {
                     right: 1,
                   }}
                 >
-                  <Edit onPress={() => openOverlay(item.name)} />
+                  <Edit onPress={() => openOverlay(item.id, item.name)} />
                 </View>
                 <View
                   style={{

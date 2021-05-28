@@ -20,11 +20,18 @@ const createVehicle = async (name, vehicleVariantId) => {
   });
 };
 
-const udpateVehicle = async (id, name) => {
+const updateVehicle= async (id, name) => {
   return request({
     method: 'patch',
     url: `/vehicles/${id}`,
     data: { name },
+  });
+};
+
+const deleteVehicle = async (id) => {
+  return request({
+    method: 'delete',
+    url: `/vehicles/${id}`,
   });
 };
 
@@ -33,4 +40,6 @@ module.exports = {
   getVariants,
   getVehicles,
   createVehicle,
+  updateVehicle,
+  deleteVehicle,
 };
