@@ -23,11 +23,12 @@ const request = async (opts = {}) => {
   }
   const qsParams = qs.stringify(opts.qs, { addQueryPrefix: true });
   let headers;
+  const appid = 'axle-records-customer'
   if(authHeaders){
     const idtoken = await firebase.auth().currentUser.getIdToken();
-    headers = Object.assign({}, { authorization: idtoken }, opts.headers);
+    headers = Object.assign({}, { authorization: idtoken, appid }, opts.headers);
   } else {
-    headers = opts.headers;
+    headers = Object.assign({}, { appid }, opts.headers);
   }
   const reqOpts = {
     method: opts.method || 'get',
