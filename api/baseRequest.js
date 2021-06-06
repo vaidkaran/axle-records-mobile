@@ -36,6 +36,10 @@ const request = async (opts = {}) => {
     headers,
   };
   if (opts.data) reqOpts.data = opts.data;
+  
+  console.log('****************** reqOpts *********************');
+  console.log(reqOpts)
+  console.log('***************************************');
 
   const res = await axios(reqOpts);
 

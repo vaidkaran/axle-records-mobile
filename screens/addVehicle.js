@@ -38,8 +38,8 @@ export default function ({ navigation }) {
   };
 
   const addVehicle = async () => {
-    // const name = vehicleName ? vehicleName : `${selectedModelName} ${selectedVariantName}`
-    // await createVehicle(name, selectedVariantId);
+    const name = vehicleName ? vehicleName : `${selectedModelName} ${selectedVariantName}`
+    await createVehicle(name, selectedVariantId);
     navigation.navigate('Home', {refresh: true});
   };
 

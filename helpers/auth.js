@@ -30,8 +30,6 @@ const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
   setAuthInProgress(true);
   const res = await Google.logInAsync(config);
   if (res.type === 'success') {
-    setIsSignedIn(true);
-    await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     const credential = firebase.auth.GoogleAuthProvider.credential(
       res.idToken,
       res.accessToken
@@ -40,10 +38,17 @@ const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
       .auth()
       .signInWithCredential(credential);
     const idToken = await firebase.auth().currentUser.getIdToken();
+    try {
+      const { status } = await create_or_sign_in(idToken, { fullRes: true });
+      setIsSignedIn(true);
+      await firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    } catch (err) {
+      console.log('ERROR: call to create_or_sign_in status failed!');
+      console.log(`ERROR: ${err}`);
+    }
     setAuthInProgress(false);
-    const userRes = await create_or_sign_in(idToken, { fullRes: true });
-    console.log('idToken: ', idToken);
-    console.log('create_or_sign_in status: ', userRes.status);
   } else {
     // TODO: ask the user that it this failed and to try again
     console.log('xxxxxx Google sign in failed xxxxxxxx');
