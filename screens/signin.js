@@ -7,7 +7,7 @@ import { googleSignIn } from '../helpers/auth';
 import AuthContext from '../context/auth';
 
 export default function ({ navigation }) {
-  const { setIsSignedIn, setAuthInProgress } = useContext(AuthContext);
+  const { setIsSignedIn, setAuthInProgress, setUserData } = useContext(AuthContext);
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <DrawerIcon onPress={() => navigation.openDrawer()} />,
@@ -22,7 +22,7 @@ export default function ({ navigation }) {
         <Image source={GoogleIcon} />
         <Button
           title="sign in with Google"
-          onPress={() => googleSignIn(setIsSignedIn, setAuthInProgress)}
+          onPress={() => googleSignIn(setIsSignedIn, setAuthInProgress, setUserData)}
         />
       </View>
       <View style={styles.aboutLink}>

@@ -8,17 +8,26 @@ import { ActivityIndicator, View } from 'react-native';
 import { initFirebase } from './helpers/auth';
 import AuthContext from './context/auth';
 import * as firebase from 'firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [authInProgress, setAuthInProgress] = useState(false);
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
     setAuthInProgress(true);
     initFirebase();
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) setIsSignedIn(true);
-      setAuthInProgress(false);
+      if (user) {
+        AsyncStorage.getItem('@userData').then((data) => { 
+          setUserData(JSON.parse(data));
+          setIsSignedIn(true);
+          setAuthInProgress(false);
+        });
+      } else {
+        setAuthInProgress(false);
+      }
     });
   }, []);
 
@@ -32,7 +41,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider
-      value={{ isSignedIn, setIsSignedIn, setAuthInProgress }}
+      value={{ isSignedIn, setIsSignedIn, setAuthInProgress, userData, setUserData }}
     >
       <NavigationContainer>
         {isSignedIn ? (

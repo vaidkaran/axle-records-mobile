@@ -1,13 +1,17 @@
 import About from './about';
-import Home from './home';
 import Signin from './signin';
 import Signout from './signout';
 import AddVehicle from './addVehicle';
+import CustomerHome from './customerHome';
+import VendorHome from './vendorHome';
+import SelectSiteRole from './selectSiteRole';
 
 module.exports = {
   About,
-  Home,
   Signin,
   Signout,
   AddVehicle,
+  CustomerHome,
+  VendorHome,
+  SelectSiteRole,
 };

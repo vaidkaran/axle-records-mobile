@@ -36,11 +36,14 @@ const request = async (opts = {}) => {
   };
   if (opts.data) reqOpts.data = opts.data;
   
-  console.log('****************** reqOpts *********************');
-  console.log(reqOpts)
-  console.log('***************************************');
+  // console.log('****************** reqOpts *********************');
+  // console.log(reqOpts)
+  // console.log('***************************************');
 
   const res = await axios(reqOpts);
+  // console.log('****************** res *********************');
+  // console.log(reqOpts.data)
+  // console.log('***************************************');
 
   if (opts.fullRes) return res;
   return res.data; // return only response body

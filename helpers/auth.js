@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import * as Google from 'expo-google-app-auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create_or_sign_in } from '../api/axleRecordsApi/users';
 
 const initFirebase = () => {
@@ -19,7 +20,7 @@ const initFirebase = () => {
   }
 };
 
-const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
+const googleSignIn = async (setIsSignedIn, setAuthInProgress, setUserData) => {
   const config = {
     androidClientId:
       '97966421563-vbau4nupvdunk6kpvkjbuime02f8hf4e.apps.googleusercontent.com',
@@ -39,8 +40,11 @@ const googleSignIn = async (setIsSignedIn, setAuthInProgress) => {
       .signInWithCredential(credential);
     const idToken = await firebase.auth().currentUser.getIdToken();
     try {
-      const { status } = await create_or_sign_in(idToken, { fullRes: true });
-      setIsSignedIn(true);
+      const { data } = await create_or_sign_in(idToken, { fullRes: true });
+      console.log('data to set in async storage: ',data);
+      // TODO: use re-usable functions like asyncStorage.setUserData to avoid typos in keys
+      await AsyncStorage.setItem('@userData', JSON.stringify(data))
+      setUserData(data)
       await firebase
         .auth()
         .setPersistence(firebase.auth.Auth.Persistence.LOCAL);
