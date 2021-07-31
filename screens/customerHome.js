@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Button, Overlay, Input } from 'react-native-elements';
 import { Colors } from '../styles';
-import { ShadowCard } from '../components';
+import { ShadowCard, AddCard } from '../components';
 import { PlusIcon, DrawerIcon, Edit } from '../assets';
 import {
   getVehicles,
@@ -59,6 +59,8 @@ export default function ({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+
+      {/* modal to udpate vehicle details or delete vehicle */}
       <Overlay
         overlayStyle={styles.overlay}
         isVisible={overlayVisible}
@@ -86,7 +88,9 @@ export default function ({ navigation, route }) {
           </View>
         </View>
       </Overlay>
+
       {vehicles ? (
+        // list of existing vehicles
         <FlatList
           data={vehicles}
           keyExtractor={(item) => item.id.toString()}
@@ -100,6 +104,7 @@ export default function ({ navigation, route }) {
                     right: 1,
                   }}
                 >
+                  {/* open the edit modal */}
                   <Edit onPress={() => openOverlay(item.id, item.name)} />
                 </View>
                 <View
@@ -119,13 +124,9 @@ export default function ({ navigation, route }) {
         <ActivityIndicator size="large" color="#0000ff" />
       )}
 
-      <ShadowCard
-        style={styles.card}
-        onPress={() => navigation.navigate('AddVehicle')}
-      >
-        <Text style={styles.message}>Add a vehicle</Text>
-        <PlusIcon />
-      </ShadowCard>
+      {/* card to add a new vehicle */}
+      <AddCard onPress={() => navigation.navigate('AddVehicle')} title={'Add a vehicle'}/>
+
       <StatusBar style="auto" />
     </View>
   );
