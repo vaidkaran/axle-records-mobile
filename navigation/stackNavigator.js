@@ -4,28 +4,32 @@ import {
   VendorHome,
   SelectSiteRole,
   AddVehicle,
+  AddShop,
 } from '../screens';
 import { createStackNavigator } from '@react-navigation/stack';
 
-const HomeStack = createStackNavigator();
+const SiteRoleStack = createStackNavigator();
+const CHomeStack = createStackNavigator();
+const VHomeStack = createStackNavigator();
 
 const CustomerHomeStack = () => (
-  <HomeStack.Navigator initialRouteName="Home">
-    <HomeStack.Screen name="Home" component={CustomerHome} />
-    <HomeStack.Screen name="AddVehicle" component={AddVehicle} />
-  </HomeStack.Navigator>
+  <CHomeStack.Navigator initialRouteName="CustomerHome">
+    <CHomeStack.Screen name="CustomerHome" component={CustomerHome} />
+    <CHomeStack.Screen name="AddVehicle" component={AddVehicle} />
+  </CHomeStack.Navigator>
 );
 
 const VendorHomeStack = () => (
-  <HomeStack.Navigator initialRouteName="Home">
-    <HomeStack.Screen name="Home" component={VendorHome} />
-  </HomeStack.Navigator>
+  <VHomeStack.Navigator initialRouteName="VendorHome">
+    <VHomeStack.Screen name="VendorHome" component={VendorHome} />
+    <VHomeStack.Screen name="AddShop" component={AddShop} />
+  </VHomeStack.Navigator>
 );
 
 const SelectSiteRoleStack = () => (
-  <HomeStack.Navigator initialRouteName="Home">
-    <HomeStack.Screen name="Home" component={SelectSiteRole} />
-  </HomeStack.Navigator>
+  <SiteRoleStack.Navigator initialRouteName="Home">
+    <SelectSiteRoleStack.Screen name="Home" component={SelectSiteRole} />
+  </SiteRoleStack.Navigator>
 );
 
 module.exports = {

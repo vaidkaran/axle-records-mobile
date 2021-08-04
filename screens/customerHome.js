@@ -17,6 +17,7 @@ import {
   updateVehicle,
   deleteVehicle,
 } from '../api/axleRecordsApi/vehicles';
+import { CardList as styles } from '../styles';
 
 export default function ({ navigation, route }) {
   const [vehicles, setVehicles] = useState();
@@ -52,14 +53,13 @@ export default function ({ navigation, route }) {
   };
 
   const deleteSelectedVehicle = async () => {
-    await deleteVehicle(vehicleUpdateData.id)
+    await deleteVehicle(vehicleUpdateData.id);
     setOverlayVisible(false);
     setVehicles(await getVehicles());
-  }
+  };
 
   return (
     <View style={styles.container}>
-
       {/* modal to udpate vehicle details or delete vehicle */}
       <Overlay
         overlayStyle={styles.overlay}
@@ -125,27 +125,12 @@ export default function ({ navigation, route }) {
       )}
 
       {/* card to add a new vehicle */}
-      <AddCard onPress={() => navigation.navigate('AddVehicle')} title={'Add a vehicle'}/>
+      <AddCard
+        onPress={() => navigation.navigate('AddVehicle')}
+        title={'Add a vehicle'}
+      />
 
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.lightGrey,
-  },
-  message: {
-    fontSize: 20,
-    paddingBottom: 10,
-  },
-  card: {
-    height: 150,
-  },
-  overlay: {
-    height: '50%',
-    width: '80%',
-    borderRadius: 20,
-  },
-});

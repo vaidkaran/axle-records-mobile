@@ -1,5 +1,7 @@
-import Colors from "./colors";
+import Colors from './colors';
+import CardList from './cardList';
 
 module.exports = {
-  Colors
-}
+  Colors,
+  CardList,
+};

@@ -5,6 +5,7 @@ import AddVehicle from './addVehicle';
 import CustomerHome from './customerHome';
 import VendorHome from './vendorHome';
 import SelectSiteRole from './selectSiteRole';
+import AddShop from './addShop';
 
 module.exports = {
   About,
@@ -14,4 +15,5 @@ module.exports = {
   CustomerHome,
   VendorHome,
   SelectSiteRole,
+  AddShop,
 };
