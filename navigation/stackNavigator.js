@@ -14,14 +14,14 @@ const VHomeStack = createStackNavigator();
 
 const CustomerHomeStack = () => (
   <CHomeStack.Navigator initialRouteName="CustomerHome">
-    <CHomeStack.Screen name="CustomerHome" component={CustomerHome} />
+    <CHomeStack.Screen name="Home" component={CustomerHome} />
     <CHomeStack.Screen name="AddVehicle" component={AddVehicle} />
   </CHomeStack.Navigator>
 );
 
 const VendorHomeStack = () => (
   <VHomeStack.Navigator initialRouteName="VendorHome">
-    <VHomeStack.Screen name="VendorHome" component={VendorHome} />
+    <VHomeStack.Screen name="Home" component={VendorHome} />
     <VHomeStack.Screen name="AddShop" component={AddShop} />
   </VHomeStack.Navigator>
 );

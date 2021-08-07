@@ -8,6 +8,7 @@ const getShops = (opts={}) => {
 }
 
 const createShop = (data={}, opts={}) => {
+  console.log('---------> making a request to createShop');
   return request({
     method: 'post',
     url: 'shops',

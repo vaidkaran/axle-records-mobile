@@ -18,7 +18,6 @@ const Drawer = createDrawerNavigator();
 
 const HomeStackNavigator = () => {
   const { userData } = useContext(AuthContext);
-  console.log('userData in HomeStackNavigator: ', userData);
   if (!userData) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -33,9 +32,6 @@ const HomeStackNavigator = () => {
     return <CustomerHomeStack/>;
   }
 };
-
-// TODO: create CustomerHomeStack and VendorHomeStack
-// then depending on the site role, render that component in home
 
 const SignedInDrawerNavigator = () => (
   <Drawer.Navigator
