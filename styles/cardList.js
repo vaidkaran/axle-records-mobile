@@ -13,7 +13,7 @@ module.exports = StyleSheet.create({
   card: {
     height: 150,
   },
-  overlay: {
+  editOverlay: {
     height: '50%',
     width: '80%',
     borderRadius: 20,

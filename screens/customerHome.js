@@ -62,7 +62,7 @@ export default function ({ navigation, route }) {
     <View style={styles.container}>
       {/* modal to udpate vehicle details or delete vehicle */}
       <Overlay
-        overlayStyle={styles.overlay}
+        overlayStyle={styles.editOverlay}
         isVisible={overlayVisible}
         onBackdropPress={closeOverlay}
       >
@@ -71,7 +71,6 @@ export default function ({ navigation, route }) {
             <Input
               defaultValue={vehicleUpdateData.name}
               rightIcon={<Edit />}
-              rightIcon={{ type: 'antdesign', name: 'edit' }}
               onChangeText={(name) =>
                 setVehicleUpdateData({ id: vehicleUpdateData.id, name })
               }

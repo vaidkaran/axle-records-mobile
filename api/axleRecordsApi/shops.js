@@ -8,7 +8,6 @@ const getShops = (opts={}) => {
 }
 
 const createShop = (data={}, opts={}) => {
-  console.log('---------> making a request to createShop');
   return request({
     method: 'post',
     url: 'shops',
@@ -24,8 +23,24 @@ const createShop = (data={}, opts={}) => {
   });
 }
 
+const updateShop = (id, data={}, opts={}) => {
+  return request({
+    method: 'patch',
+    url: `/shops/${id}`,
+    data: {
+      name: data.name,
+      address: data.address,
+      city: data.city,
+      state: data.state,
+      pin: data.pin
+    },
+    ...opts,
+  });
+}
+
 module.exports = {
   getShops,
   createShop,
+  updateShop,
 };
 

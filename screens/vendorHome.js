@@ -14,14 +14,14 @@ import {
   updateVehicle,
   deleteVehicle,
 } from '../api/axleRecordsApi/vehicles';
-import { getShops, createShop } from '../api/axleRecordsApi/shops';
+import { getShops, updateShop } from '../api/axleRecordsApi/shops';
 import { CardList as styles } from '../styles';
 
 export default function ({ navigation, route }) {
   // const [vehicles, setVehicles] = useState();
   const [shops, setShops] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
-  const [vehicleUpdateData, setVehicleUpdateData] = useState({});
+  const [shopUpdateData, setShopUpdateData] = useState({});
 
   React.useEffect(() => {
     (async () => {
@@ -36,58 +36,44 @@ export default function ({ navigation, route }) {
     });
   }, [navigation]);
 
-  const openOverlay = (vehicleId, vehicleName) => {
-    setVehicleUpdateData({ id: vehicleId, name: vehicleName });
+  const openOverlay = (shop) => {
+    setShopUpdateData({
+      id: shop.id,
+      name: shop.name,
+      address: shop.address,
+      city: shop.city,
+      state: shop.state,
+      pin: shop.pin
+    });
     setOverlayVisible(true);
   };
 
   const closeOverlay = () => {
     setOverlayVisible(false);
-    setVehicleUpdateData({});
+    setShopUpdateData({});
   };
 
-  const updateVehicleName = async () => {
-    await updateVehicle(vehicleUpdateData.id, vehicleUpdateData.name);
+  const updateShopDetails = async () => {
+    const res = await updateShop(shopUpdateData.id, {
+      name: shopUpdateData.name,
+      address: shopUpdateData.address,
+      city: shopUpdateData.city,
+      state: shopUpdateData.state,
+      pin: shopUpdateData.pin,
+    });
+    console.log('update res ------->>>', res)
     setOverlayVisible(false);
-    setVehicles(await getVehicles());
+    setShops(await getShops());
   };
 
   const deleteSelectedVehicle = async () => {
-    await deleteVehicle(vehicleUpdateData.id);
+    await deleteVehicle(shopUpdateData.id);
     setOverlayVisible(false);
-    setVehicles(await getVehicles());
+    setVehicles(await getShops());
   };
 
   return (
     <View style={styles.container}>
-      {/* modal to udpate vehicle details or delete vehicle */}
-      <Overlay
-        overlayStyle={styles.overlay}
-        isVisible={overlayVisible}
-        onBackdropPress={closeOverlay}
-      >
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 8 }}>
-            <Input
-              defaultValue={vehicleUpdateData.name}
-              rightIcon={<Edit />}
-              rightIcon={{ type: 'antdesign', name: 'edit' }}
-              onChangeText={(name) =>
-                setVehicleUpdateData({ id: vehicleUpdateData.id, name })
-              }
-            />
-            <Button type="solid" title="Save" onPress={updateVehicleName} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Button
-              type="solid"
-              title="Delete"
-              buttonStyle={{ backgroundColor: 'red' }}
-              onPress={deleteSelectedVehicle}
-            />
-          </View>
-        </View>
-      </Overlay>
 
       {shops ? (
         // list of existing shops
@@ -105,7 +91,7 @@ export default function ({ navigation, route }) {
                   }}
                 >
                   {/* open the edit modal */}
-                  <Edit onPress={() => openOverlay(item.id, item.name)} />
+                  <Edit onPress={() => openOverlay(item)} />
                 </View>
                 <View
                   style={{
@@ -129,6 +115,63 @@ export default function ({ navigation, route }) {
         onPress={() => navigation.navigate('AddShop')}
         title={'Add a shop'}
       />
+
+      {/* modal to udpate vehicle details or delete vehicle */}
+      <Overlay
+        overlayStyle={{...styles.editOverlay, height: '80%'}}
+        isVisible={overlayVisible}
+        onBackdropPress={closeOverlay}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 8 }}>
+            <Input
+              defaultValue={shopUpdateData.name}
+              rightIcon={<Edit />}
+              onChangeText={(value) =>
+                setShopUpdateData({...shopUpdateData, name: value})
+              }
+            />
+            <Input
+              defaultValue={shopUpdateData.address}
+              rightIcon={<Edit />}
+              onChangeText={(value) =>
+                setShopUpdateData({...shopUpdateData, address: value })
+              }
+            />
+            <Input
+              defaultValue={shopUpdateData.city}
+              rightIcon={<Edit />}
+              onChangeText={(value) =>
+                setShopUpdateData({...shopUpdateData, city: value })
+              }
+            />
+            <Input
+              defaultValue={shopUpdateData.state}
+              rightIcon={<Edit />}
+              onChangeText={(value) =>
+                setShopUpdateData({...shopUpdateData, state: value })
+              }
+            />
+            <Input
+              defaultValue={shopUpdateData.pin}
+              rightIcon={<Edit />}
+              onChangeText={(value) =>
+                setShopUpdateData({...shopUpdateData, pin: value })
+              }
+            />
+
+            <Button type="solid" title="Save" onPress={updateShopDetails} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              type="solid"
+              title="Delete shop"
+              buttonStyle={{ backgroundColor: 'red' }}
+              onPress={deleteSelectedVehicle}
+            />
+          </View>
+        </View>
+      </Overlay>
 
       <StatusBar style="auto" />
     </View>
