@@ -14,7 +14,7 @@ import {
   updateVehicle,
   deleteVehicle,
 } from '../api/axleRecordsApi/vehicles';
-import { getShops, updateShop } from '../api/axleRecordsApi/shops';
+import { getShops, updateShop, deleteShop } from '../api/axleRecordsApi/shops';
 import { CardList as styles } from '../styles';
 
 export default function ({ navigation, route }) {
@@ -54,22 +54,21 @@ export default function ({ navigation, route }) {
   };
 
   const updateShopDetails = async () => {
-    const res = await updateShop(shopUpdateData.id, {
+    await updateShop(shopUpdateData.id, {
       name: shopUpdateData.name,
       address: shopUpdateData.address,
       city: shopUpdateData.city,
       state: shopUpdateData.state,
       pin: shopUpdateData.pin,
     });
-    console.log('update res ------->>>', res)
     setOverlayVisible(false);
     setShops(await getShops());
   };
 
-  const deleteSelectedVehicle = async () => {
-    await deleteVehicle(shopUpdateData.id);
+  const deleteSelectedShop = async () => {
+    await deleteShop(shopUpdateData.id);
     setOverlayVisible(false);
-    setVehicles(await getShops());
+    setShops(await getShops());
   };
 
   return (
@@ -167,7 +166,7 @@ export default function ({ navigation, route }) {
               type="solid"
               title="Delete shop"
               buttonStyle={{ backgroundColor: 'red' }}
-              onPress={deleteSelectedVehicle}
+              onPress={deleteSelectedShop}
             />
           </View>
         </View>

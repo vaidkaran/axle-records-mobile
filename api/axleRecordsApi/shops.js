@@ -38,9 +38,19 @@ const updateShop = (id, data={}, opts={}) => {
   });
 }
 
+const deleteShop = (id, opts={}) => {
+  return request({
+    method: 'delete',
+    url: `/shops/${id}`,
+    ...opts,
+  });
+}
+
+
 module.exports = {
   getShops,
   createShop,
   updateShop,
+  deleteShop
 };
 
