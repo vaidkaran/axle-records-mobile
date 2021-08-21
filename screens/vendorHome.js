@@ -9,23 +9,16 @@ import {
 import { Button, Overlay, Input } from 'react-native-elements';
 import { ShadowCard, AddCard } from '../components';
 import { DrawerIcon, Edit } from '../assets';
-import {
-  getVehicles,
-  updateVehicle,
-  deleteVehicle,
-} from '../api/axleRecordsApi/vehicles';
 import { getShops, updateShop, deleteShop } from '../api/axleRecordsApi/shops';
 import { CardList as styles } from '../styles';
 
 export default function ({ navigation, route }) {
-  // const [vehicles, setVehicles] = useState();
   const [shops, setShops] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [shopUpdateData, setShopUpdateData] = useState({});
 
   React.useEffect(() => {
     (async () => {
-      // setVehicles(await getVehicles());
       setShops(await getShops());
     })();
   }, [route.params]);
@@ -80,7 +73,7 @@ export default function ({ navigation, route }) {
           data={shops}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <ShadowCard style={styles.card}>
+            <ShadowCard style={styles.card} onPress={()=>{navigation.navigate('Shop', {shopId: item.id})}}>
               <View style={{ flex: 1, width: '100%' }}>
                 <View
                   style={{

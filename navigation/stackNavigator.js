@@ -5,6 +5,7 @@ import {
   SelectSiteRole,
   AddVehicle,
   AddShop,
+  Shop,
 } from '../screens';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -23,6 +24,7 @@ const VendorHomeStack = () => (
   <VHomeStack.Navigator initialRouteName="VendorHome">
     <VHomeStack.Screen name="Home" component={VendorHome} />
     <VHomeStack.Screen name="AddShop" component={AddShop} />
+    <VHomeStack.Screen name="Shop" component={Shop} />
   </VHomeStack.Navigator>
 );
 

@@ -7,6 +7,13 @@ const getShops = (opts={}) => {
   });
 }
 
+const getShopDetails = (id, opts={}) => {
+  return request({
+    url: `/shops/${id}`,
+    ...opts,
+  });
+}
+
 const createShop = (data={}, opts={}) => {
   return request({
     method: 'post',
@@ -51,6 +58,7 @@ module.exports = {
   getShops,
   createShop,
   updateShop,
-  deleteShop
+  deleteShop,
+  getShopDetails,
 };
 
