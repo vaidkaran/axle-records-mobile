@@ -7,6 +7,8 @@ import VendorHome from './vendorHome';
 import SelectSiteRole from './selectSiteRole';
 import AddShop from './addShop';
 import Shop from './shop';
+import ShopSettings from './shopSettings';
+import AddJob from './addJob';
 
 module.exports = {
   About,
@@ -18,4 +20,6 @@ module.exports = {
   SelectSiteRole,
   AddShop,
   Shop,
+  ShopSettings,
+  AddJob,
 };

@@ -6,6 +6,7 @@ import {
   AntDesign,
   MaterialCommunityIcons,
   Entypo,
+  EvilIcons,
 } from '@expo/vector-icons';
 
 const DrawerIcon = ({ onPress }) => {
@@ -38,6 +39,10 @@ const PlusIcon = ({ onPress, size }) => {
   );
 };
 
+const GearIcon = ({onPress}) => {
+  return <EvilIcons name="gear" size={30} color="black" style={{paddingHorizontal: 10}} onPress={onPress}/>
+};
+
 module.exports = {
   AppLogo,
   GoogleIcon,
@@ -45,4 +50,5 @@ module.exports = {
   PlusIcon,
   DotsVertical,
   Edit,
+  GearIcon,
 };
