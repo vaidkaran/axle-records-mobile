@@ -34,7 +34,7 @@ const VendorHomeStack = () => (
 
 const SelectSiteRoleStack = () => (
   <SiteRoleStack.Navigator initialRouteName="Home">
-    <SelectSiteRoleStack.Screen name="Home" component={SelectSiteRole} />
+    <SiteRoleStack.Screen name="Home" component={SelectSiteRole} />
   </SiteRoleStack.Navigator>
 );
 
