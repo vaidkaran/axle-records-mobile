@@ -1,52 +1,52 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator, ScrollView} from 'react-native';
-import {Text, ListItem} from 'react-native-elements';
+import {Text, Input, ListItem, Overlay} from 'react-native-elements';
 import {getJobs} from '../api/axleRecordsApi/jobs';
-import {createJobProfile, getJobProfiles} from '../api/axleRecordsApi/jobProfiles';
+import {createJobProfile, getJobProfiles, deleteJobProfile, updateJobProfile} from '../api/axleRecordsApi/jobProfiles';
 import {Button} from '../components';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { FlatList } from 'react-native';
 import { Entypo, FontAwesome, AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+import { CardList as overlayStyles } from '../styles';
+import { Edit } from '../assets';
 
 export default function({navigation, route}) {
   const [loading, setLoading] = useState();
   const [jobs, setJobs] = useState();
   const [jobProfiles, setJobProfiles] = useState([]);
   const [selectedJobIds, setSelectedJobIds] = useState([]);
+  const [descriptionOverlayVisible, setDescriptionOverlayVisible] = useState(false);
+  const [priceOverlayVisible, setPriceOverlayVisible] = useState(false);
+  const [jobDescriptionToDisplay, setJobDescriptionToDisplay] = useState();
+  // const [itemPrice, setItemPricej] = useState();
+  const [priceUpdateData, setPriceUpdateData] = useState({});
   const jobsRef = useRef(null);
   const shopId = useRef(null);
 
+  const refreshJobs = async () => {
+    const jobsList = await getJobs();
+    // keeping name as empty string since it shows up on top of the list as a category
+    setJobs([{name: '', children: jobsList}]);
+  };
+
+  const refreshJobProfiles = async () => {
+    // shopId.current will be set in the useEffect
+    const jobProfilesList = await getJobProfiles(shopId.current)
+    setJobProfiles(jobProfilesList.map((jobProfile) => {
+      return {
+        id: jobProfile.id,
+        title: jobProfile.job.name,
+        description: jobProfile.job.description,
+        price: jobProfile.price
+      }
+    }));
+  }
+
   useEffect(() => {
     (async () => {
-      console.log('route params: ', route.params.shopId)
       shopId.current = route.params.shopId;
-      const jobsListPromise = getJobs();
-      const jobProfilesPromise = getJobProfiles(shopId.current);
-      const [jobsList, jobProfilesList] = await Promise.all([jobsListPromise, jobProfilesPromise]);
-      setJobs([{name: 'jobs', children: jobsList}]);
-      // setJobProfiles(jobProfilesList.map((jobProfile) => {
-      //   return {
-      //     title: (jobsList.find(job => jobProfile.job_id===job.id)).name, // job profile name is taken from job
-      //     id: jobProfile.id
-      //   }
-      // }));
-
-      setJobProfiles([
-        {title: 'this', id: 1}, 
-        {title: 'that', id: 2},
-        {title: 'that', id: 3},
-        {title: 'that', id: 4},
-        {title: 'that', id: 5},
-        {title: 'that', id: 6},
-        {title: 'that', id: 8},
-        {title: 'that', id: 9},
-        {title: 'that', id: 10},
-        {title: 'that', id: 11},
-        {title: 'ttetet', id: 12},
-        {title: 'sdfs', id: 13},
-        {title: 'lst', id: 14},
-      ]);
+      await Promise.all([refreshJobs(), refreshJobProfiles()]);
     })();
   }, [navigation, route])
 
@@ -65,6 +65,46 @@ export default function({navigation, route}) {
     await Promise.all(selectedJobIds.map((jobId) => {
       return createJobProfile({shopId: shopId.current, jobId})
     }));
+    await refreshJobProfiles();
+    jobsRef && jobsRef.current && jobsRef.current._removeAllItems();
+  }
+
+  const onDelete = async (jobProfileId) => {
+    await deleteJobProfile(jobProfileId);
+    await refreshJobProfiles();
+  }
+
+  const openDescriptionOverlay = () => {
+    setDescriptionOverlayVisible(true);
+  };
+
+  const closeDescriptionOverlay = () => {
+    setDescriptionOverlayVisible(false);
+  };
+
+  const onView = (description) => {
+    console.log('onview invoked');
+    setJobDescriptionToDisplay(description);
+    openDescriptionOverlay();
+  }
+
+  const openPriceOverlay = () => {
+    setPriceOverlayVisible(true);
+  };
+
+  const closePriceOverlay = () => {
+    setPriceOverlayVisible(false);
+  };
+
+  const onPriceEditClick = (id, price) => {
+    setPriceUpdateData({id, price});
+    openPriceOverlay();
+  }
+
+  const onPriceChangeSave = async () => {
+    await updateJobProfile(priceUpdateData.id, {price: priceUpdateData.price});
+    await refreshJobProfiles();
+    closePriceOverlay()
   }
 
   return (
@@ -82,7 +122,7 @@ export default function({navigation, route}) {
               uniqueKey="id"
               readOnlyHeadings={true}
               subKey="children"
-              selectText="Select jobs"
+              selectText="Select jobs from the list"
               searchPlaceholderText='Search here (eg: "oil change" or "wheel balancing")'
               onSelectedItemsChange={(selectedItemIds) => {
                 console.log('selected items; ', selectedItemIds);
@@ -97,6 +137,9 @@ export default function({navigation, route}) {
             />
 
             <Button title='Add selected jobs' color='red' onPress={addSelectedJobs} />
+            <Text style={styles.cannotFindLink} onPress={()=> console.log('clicked the link')}>
+              Couldn't find what you were looking for? Click here to add.
+            </Text>
           </ScrollView>
         )}
       </View>
@@ -104,30 +147,65 @@ export default function({navigation, route}) {
       {/* Jobs list for the shop */}
       <View style={styles.listContainer}>
         <View>
-          <Text h4>Jobs List: </Text>
+          <Text h4>Jobs that you support:</Text>
           <View style={styles.titleDivider}/>
         </View>
         <FlatList
           data={jobProfiles}
           keyExtractor={(item => item.id.toString())}
           renderItem={({item}) => (
-            <TouchableOpacity>
-              <ListItem bottomDivider topDivider>
-                <ListItem.Content>
-                  <ListItem.Title>{item.title}</ListItem.Title>
-                </ListItem.Content>
-                <View style={styles.divider}></View>
-                <FontAwesome name="rupee" size={18} color="black" />
-                <Text style={{fontSize: 24}}>0</Text>
-                <View style={styles.divider}></View>
-                <Ionicons name="eye-outline" size={20} color="blue" />
-                <View style={styles.divider}></View>
-                <AntDesign name="delete" size={20} color="red" />
-              </ListItem>
-            </TouchableOpacity>
+            <ListItem bottomDivider topDivider>
+              <ListItem.Content>
+                <ListItem.Title>{item.title}</ListItem.Title>
+              </ListItem.Content>
+              <View style={styles.divider}></View>
+              <View style={styles.price} >
+                <Text style={{fontSize: 24}} onPress={()=>{onPriceEditClick(item.id, item.price)}}>{item.price||`₹ -`}</Text>
+              </View>
+              <View style={styles.divider}></View>
+              <Ionicons name="eye-outline" onPress={()=>{onView(item.description)}} size={20} color="blue" />
+              <View style={styles.divider}></View>
+              <AntDesign name="delete" onPress={()=>{onDelete(item.id)}} size={20} color="red" />
+            </ListItem>
           )}
         />
       </View>
+
+      {/* modal to display job item details */}
+      <Overlay
+        overlayStyle={overlayStyles.editOverlay}
+        isVisible={descriptionOverlayVisible}
+        onBackdropPress={closeDescriptionOverlay}
+      >
+        <ScrollView>
+          <Text h4>Description:</Text>
+          <View style={{height: 10}}></View>
+          <Text>{jobDescriptionToDisplay}</Text>
+        </ScrollView>
+      </Overlay>
+
+      {/* modal to display edit price */}
+      <Overlay
+        overlayStyle={overlayStyles.editOverlay}
+        isVisible={priceOverlayVisible}
+        onBackdropPress={closePriceOverlay}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 8 }}>
+            <Input
+              defaultValue={priceUpdateData.price}
+              rightIcon={<Edit />}
+              keyboardType='numeric'
+              maxLength={7}
+              onChangeText={(price) =>
+                setPriceUpdateData({id: priceUpdateData.id, price})
+              }
+            />
+            <Button type="solid" title="Save" onPress={onPriceChangeSave}/>
+          </View>
+        </View>
+      </Overlay>
+
     </View>
   );
 };
@@ -147,6 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
     width: 1,
     height: '100%',
+    paddingHorizontal: 0
   },
   titleDivider: {
     height: 1,
@@ -154,5 +233,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     marginTop: 4,
     marginBottom: 8
+  },
+  cannotFindLink: {
+    paddingVertical: 5,
+    color: 'blue',
+    textDecorationLine: 'underline'
+  },
+  price: {
+    flexDirection: 'row'
   }
 });

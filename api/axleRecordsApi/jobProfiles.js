@@ -27,21 +27,16 @@ const createJobProfile = async (data={}, opts={}) => {
   });
 }
 
-// Need to figure this out
-// const updateJobProfile = (id, data={}, opts={}) => {
-//   return request({
-//     method: 'patch',
-//     url: `/job_profiles/${id}`,
-//     data: {
-//       name: data.name,
-//       address: data.address,
-//       city: data.city,
-//       state: data.state,
-//       pin: data.pin
-//     },
-//     ...opts,
-//   });
-// }
+const updateJobProfile = (id, data={}, opts={}) => {
+  return request({
+    method: 'patch',
+    url: `/job_profiles/${id}`,
+    data: {
+      price: data.price
+    },
+    ...opts,
+  });
+}
 
 const deleteJobProfile = (id, opts={}) => {
   return request({
@@ -57,5 +52,6 @@ module.exports = {
   getJobProfileDetails,
   createJobProfile,
   deleteJobProfile,
+  updateJobProfile,
 };
 
