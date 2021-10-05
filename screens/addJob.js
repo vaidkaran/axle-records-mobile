@@ -10,6 +10,7 @@ import { Entypo, FontAwesome, AntDesign, EvilIcons, Feather, Ionicons, MaterialI
 import { TouchableOpacity } from 'react-native';
 import { CardList as overlayStyles } from '../styles';
 import { Edit } from '../assets';
+import {buttonGrey} from '../styles/colors';
 
 export default function({navigation, route}) {
   const [loading, setLoading] = useState();
@@ -18,9 +19,11 @@ export default function({navigation, route}) {
   const [selectedJobIds, setSelectedJobIds] = useState([]);
   const [descriptionOverlayVisible, setDescriptionOverlayVisible] = useState(false);
   const [priceOverlayVisible, setPriceOverlayVisible] = useState(false);
+  const [userDefinedJobOverlayVisible, setUserDefinedJobOverlayVisible] = useState(false);
   const [jobDescriptionToDisplay, setJobDescriptionToDisplay] = useState();
-  // const [itemPrice, setItemPricej] = useState();
   const [priceUpdateData, setPriceUpdateData] = useState({});
+  const [userDefinedJobName, setUserDefinedJobName] = useState();
+  const [userDefinedJobDescription, setUserDefinedJobDescription] = useState();
   const jobsRef = useRef(null);
   const shopId = useRef(null);
 
@@ -107,6 +110,18 @@ export default function({navigation, route}) {
     closePriceOverlay()
   }
 
+  const openUserDefinedJobOverlay = () => {
+    setUserDefinedJobOverlayVisible(true);
+  };
+
+  const closeUserDefinedJobOverlay = () => {
+    setUserDefinedJobOverlayVisible(false);
+  };
+
+  const onAddUserDefinedJob = async () => {
+    console.log('onAddUserDefinedJob invoked')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.selectionContainer}>
@@ -136,8 +151,8 @@ export default function({navigation, route}) {
               ref={jobsRef}
             />
 
-            <Button title='Add selected jobs' color='red' onPress={addSelectedJobs} />
-            <Text style={styles.cannotFindLink} onPress={()=> console.log('clicked the link')}>
+            <Button title='Add selected jobs' onPress={addSelectedJobs} />
+            <Text style={styles.cannotFindLink} onPress={openUserDefinedJobOverlay}>
               Couldn't find what you were looking for? Click here to add.
             </Text>
           </ScrollView>
@@ -202,6 +217,31 @@ export default function({navigation, route}) {
               }
             />
             <Button type="solid" title="Save" onPress={onPriceChangeSave}/>
+          </View>
+        </View>
+      </Overlay>
+
+      {/* modal to add a user defined job */}
+      <Overlay
+        overlayStyle={overlayStyles.editOverlay}
+        isVisible={userDefinedJobOverlayVisible}
+        onBackdropPress={closeUserDefinedJobOverlay}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 8 }}>
+            <Input
+              placeholder='Name of the job'
+              maxLength={50}
+              onChangeText={(name) => setUserDefinedJobName(name) }
+            />
+            <Input
+              placeholder='Description'
+              maxLength={100}
+              onChangeText={(description) => setUserDefinedJobDescription(description) }
+            />
+            <Button title="Save" onPress={onAddUserDefinedJob} />
+            <View style={{height: 5}}/>
+            <Button color={buttonGrey} title="Cancel" onPress={closeUserDefinedJobOverlay} />
           </View>
         </View>
       </Overlay>
