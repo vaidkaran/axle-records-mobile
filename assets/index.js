@@ -14,14 +14,7 @@ const DrawerIcon = ({ onPress }) => {
 };
 
 const DotsVertical = ({ onPress }) => {
-  return (
-    <MaterialCommunityIcons
-      name="dots-vertical"
-      size={30}
-      color="black"
-      onPress={onPress}
-    />
-  );
+  return <MaterialCommunityIcons name="dots-vertical" size={30} color="black" onPress={onPress} />
 };
 
 const Edit = ({ onPress }) => {
@@ -29,18 +22,19 @@ const Edit = ({ onPress }) => {
 };
 
 const PlusIcon = ({ onPress, size }) => {
-  return (
-    <AntDesign
-      name="pluscircleo"
-      size={size || 60}
-      color="black"
-      onPress={onPress}
-    />
-  );
+  return <AntDesign name="pluscircleo" size={size || 60} color="black" onPress={onPress} />
 };
 
 const GearIcon = ({onPress}) => {
   return <EvilIcons name="gear" size={30} color="black" style={{paddingHorizontal: 10}} onPress={onPress}/>
+};
+
+const BinIcon = ({onPress, size, color}) => {
+  return <AntDesign name="delete" onPress={onPress} size={size || 20} color={color||"red"} />
+}
+
+const EyeIcon = ({onPress, size, color}) => {
+  return <Ionicons name="eye-outline" onPress={onPress} size={size || 20} color={color || "blue"} />
 };
 
 module.exports = {
@@ -51,4 +45,6 @@ module.exports = {
   DotsVertical,
   Edit,
   GearIcon,
+  BinIcon,
+  EyeIcon,
 };

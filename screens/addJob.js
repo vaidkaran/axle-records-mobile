@@ -1,15 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator, ScrollView} from 'react-native';
 import {Text, Input, ListItem, Overlay} from 'react-native-elements';
-import {getJobs} from '../api/axleRecordsApi/jobs';
+import {getJobs, createJob} from '../api/axleRecordsApi/jobs';
 import {createJobProfile, getJobProfiles, deleteJobProfile, updateJobProfile} from '../api/axleRecordsApi/jobProfiles';
 import {Button} from '../components';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { FlatList } from 'react-native';
-import { Entypo, FontAwesome, AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { CardList as overlayStyles } from '../styles';
-import { Edit } from '../assets';
+import { Edit, BinIcon, EyeIcon } from '../assets';
 import {buttonGrey} from '../styles/colors';
 
 export default function({navigation, route}) {
@@ -120,6 +119,10 @@ export default function({navigation, route}) {
 
   const onAddUserDefinedJob = async () => {
     console.log('onAddUserDefinedJob invoked')
+    const job = await createJob({name: userDefinedJobName, description: userDefinedJobDescription});
+    createJobProfile({ shopId: shopId.current, jobId: job.id });
+    await Promise.all([refreshJobs(), refreshJobProfiles()]);
+    closeUserDefinedJobOverlay();
   }
 
   return (
@@ -178,9 +181,9 @@ export default function({navigation, route}) {
                 <Text style={{fontSize: 24}} onPress={()=>{onPriceEditClick(item.id, item.price)}}>{item.price||`₹ -`}</Text>
               </View>
               <View style={styles.divider}></View>
-              <Ionicons name="eye-outline" onPress={()=>{onView(item.description)}} size={20} color="blue" />
+              <EyeIcon onPress={()=>{onView(item.description)}} />
               <View style={styles.divider}></View>
-              <AntDesign name="delete" onPress={()=>{onDelete(item.id)}} size={20} color="red" />
+              <BinIcon onPress={()=>{onDelete(item.id)}} />
             </ListItem>
           )}
         />
@@ -239,7 +242,7 @@ export default function({navigation, route}) {
               maxLength={100}
               onChangeText={(description) => setUserDefinedJobDescription(description) }
             />
-            <Button title="Save" onPress={onAddUserDefinedJob} />
+            <Button title="Add" onPress={onAddUserDefinedJob} />
             <View style={{height: 5}}/>
             <Button color={buttonGrey} title="Cancel" onPress={closeUserDefinedJobOverlay} />
           </View>
