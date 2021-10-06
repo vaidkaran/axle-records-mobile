@@ -62,8 +62,6 @@ export default function({navigation, route}) {
   }
 
   const addSelectedJobs = async () => {
-    console.log('selectedJobIds: ', selectedJobIds);
-    console.log('shopId.current: ', shopId.current);
     await Promise.all(selectedJobIds.map((jobId) => {
       return createJobProfile({shopId: shopId.current, jobId})
     }));
@@ -85,7 +83,6 @@ export default function({navigation, route}) {
   };
 
   const onView = (description) => {
-    console.log('onview invoked');
     setJobDescriptionToDisplay(description);
     openDescriptionOverlay();
   }
@@ -118,7 +115,6 @@ export default function({navigation, route}) {
   };
 
   const onAddUserDefinedJob = async () => {
-    console.log('onAddUserDefinedJob invoked')
     const job = await createJob({name: userDefinedJobName, description: userDefinedJobDescription});
     createJobProfile({ shopId: shopId.current, jobId: job.id });
     await Promise.all([refreshJobs(), refreshJobProfiles()]);
@@ -143,7 +139,6 @@ export default function({navigation, route}) {
               selectText="Select jobs from the list"
               searchPlaceholderText='Search here (eg: "oil change" or "wheel balancing")'
               onSelectedItemsChange={(selectedItemIds) => {
-                console.log('selected items; ', selectedItemIds);
                 setSelectedJobIds(selectedItemIds);
               }}
               onCancel={onCancel}
