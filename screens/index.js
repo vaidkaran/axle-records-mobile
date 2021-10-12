@@ -9,6 +9,7 @@ import AddShop from './addShop';
 import Shop from './shop';
 import ShopSettings from './shopSettings';
 import AddJob from './addJob';
+import NewJobsheet from './newJobsheet';
 
 module.exports = {
   About,
@@ -22,4 +23,5 @@ module.exports = {
   Shop,
   ShopSettings,
   AddJob,
+  NewJobsheet,
 };
