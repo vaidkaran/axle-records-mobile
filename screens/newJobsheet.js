@@ -25,6 +25,7 @@ export default function ({ navigation, route }) {
   const [vehicleModel, setVehicleModel] = useState();
   const [jobProfiles, setJobProfiles] = useState([]);
   const [selectedJobIds, setSelectedJobIds] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const jobsRef = useRef(null);
   const shopId = useRef(null);
@@ -50,9 +51,9 @@ export default function ({ navigation, route }) {
       const jobProfilesArrayToSet = (jobProfilesList.map((jobProfile) => {
         return {
           id: jobProfile.id,
-          name: jobProfile.job.name,
+          name: `${jobProfile.job.name} - ₹${jobProfile.price || 0}`,
           description: jobProfile.job.description,
-          price: jobProfile.price
+          price: parseFloat(jobProfile.price)
         }
       }));
       // keeping name as empty string since it shows up on top of the list as a category
@@ -108,6 +109,12 @@ export default function ({ navigation, route }) {
         onSelectedItemsChange={(selectedItemIds) => {
           setSelectedJobIds(selectedItemIds);
         }}
+        onSelectedItemObjectsChange={(selectedItems) => {
+          const total = selectedItems.reduce((previousValue, currentValue) => {
+            return previousValue + currentValue.price;
+          }, 0);
+          setTotalPrice(total);
+        }}
         onCancel={onCancel}
         onConfirm={onConfirm}
         showCancelButton={true}
@@ -116,7 +123,12 @@ export default function ({ navigation, route }) {
         ref={jobsRef}
       />
 
-      <Button title='Add selected jobs' />
+      <View style={{marginVertical: 40, marginHorizontal: 5}}>
+        <Text h4>Total: ₹ {totalPrice} </Text>
+      </View>
+      <View style={{width: '40%', alignSelf: 'center'}}>
+        <Button title='Create Jobsheet' />
+      </View>
     </View>
   );
 }

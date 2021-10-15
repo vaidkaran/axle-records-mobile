@@ -173,7 +173,7 @@ export default function({navigation, route}) {
               </ListItem.Content>
               <View style={styles.divider}></View>
               <View style={styles.price} >
-                <Text style={{fontSize: 24}} onPress={()=>{onPriceEditClick(item.id, item.price)}}>{item.price||`₹ -`}</Text>
+                <Text style={{fontSize: 24}} onPress={()=>{onPriceEditClick(item.id, item.price)}}>{`₹ ${item.price}`||`₹ -`}</Text>
               </View>
               <View style={styles.divider}></View>
               <EyeIcon onPress={()=>{onView(item.description)}} />
